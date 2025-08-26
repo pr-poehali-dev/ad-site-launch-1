@@ -91,11 +91,54 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'plane-takeoff': {
+					'0%': {
+						transform: 'translateX(-100px) translateY(50px) rotate(-10deg)',
+						opacity: '0'
+					},
+					'20%': {
+						transform: 'translateX(-20px) translateY(30px) rotate(0deg)',
+						opacity: '1'
+					},
+					'50%': {
+						transform: 'translateX(100px) translateY(-20px) rotate(10deg)',
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(300px) translateY(-100px) rotate(20deg)',
+						opacity: '0.8'
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0px)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'coefficient-pulse': {
+					'0%': {
+						transform: 'scale(1)',
+						color: '#10B981'
+					},
+					'50%': {
+						transform: 'scale(1.05)',
+						color: '#F59E0B'
+					},
+					'100%': {
+						transform: 'scale(1)',
+						color: '#EF4444'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'plane-takeoff': 'plane-takeoff 10s ease-in-out infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'coefficient-pulse': 'coefficient-pulse 2s ease-in-out infinite'
 			}
 		}
 	},

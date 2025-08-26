@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,39 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import Icon from "@/components/ui/icon";
 
 export default function Index() {
+  const [coefficient, setCoefficient] = useState(1.00);
+  const [isFlying, setIsFlying] = useState(false);
+  const [gameActive, setGameActive] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (gameActive) {
+      interval = setInterval(() => {
+        setCoefficient(prev => {
+          const newCoeff = prev + Math.random() * 0.05 + 0.02;
+          if (newCoeff > 10 && Math.random() < 0.3) {
+            setGameActive(false);
+            setIsFlying(false);
+            return prev;
+          }
+          return newCoeff;
+        });
+      }, 100);
+    }
+    return () => clearInterval(interval);
+  }, [gameActive]);
+
+  const startGame = () => {
+    setCoefficient(1.00);
+    setGameActive(true);
+    setIsFlying(true);
+  };
+
+  const cashOut = () => {
+    setGameActive(false);
+    setIsFlying(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-600 to-orange-500">
       {/* Navigation */}
@@ -87,30 +121,92 @@ export default function Index() {
           </h2>
           <div className="max-w-4xl mx-auto">
             <Card className="p-8 bg-black/50 backdrop-blur-sm border-white/20">
-              <div className="relative bg-gradient-to-t from-green-900 to-green-600 rounded-lg p-8 mb-6">
-                <div className="flex justify-between items-center mb-4">
+              <div className="relative bg-gradient-to-t from-green-900 to-green-600 rounded-lg p-8 mb-6 overflow-hidden">
+                {/* Flight Path */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <svg className="w-full h-full" viewBox="0 0 400 200">
+                    <path 
+                      d="M 50 150 Q 200 100 350 50" 
+                      stroke="rgba(255,255,255,0.2)" 
+                      strokeWidth="2" 
+                      fill="none"
+                      strokeDasharray="5,5"
+                    />
+                  </svg>
+                </div>
+                
+                <div className="flex justify-between items-center mb-4 relative z-10">
                   <div className="text-white">
                     <div className="text-sm opacity-75">Коэффициент</div>
-                    <div className="text-4xl font-bold">2.34×</div>
+                    <div className={`text-4xl font-bold animate-coefficient-pulse ${
+                      gameActive ? 'text-yellow-400' : 'text-white'
+                    }`}>
+                      {coefficient.toFixed(2)}×
+                    </div>
                   </div>
-                  <img 
-                    src="/img/ddca54fb-693b-48a1-978c-7352a30f9983.jpg" 
-                    alt="Plane" 
-                    className="w-16 h-16 rounded-full animate-bounce"
-                  />
+                  
+                  {/* Animated Plane */}
+                  <div className="relative">
+                    <img 
+                      src="/img/ddca54fb-693b-48a1-978c-7352a30f9983.jpg" 
+                      alt="Plane" 
+                      className={`w-16 h-16 rounded-full transition-all duration-300 ${
+                        isFlying ? 'animate-plane-takeoff' : 'animate-float'
+                      }`}
+                    />
+                    {/* Plane Trail Effect */}
+                    {isFlying && (
+                      <div className="absolute -left-20 top-8 w-16 h-1 bg-gradient-to-r from-transparent to-white opacity-50 animate-pulse" />
+                    )}
+                  </div>
                 </div>
-                <div className="text-center">
-                  <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-bold">
-                    ЗАБРАТЬ ВЫИГРЫШ
-                  </Button>
+                
+                <div className="text-center relative z-10">
+                  {!gameActive ? (
+                    <Button 
+                      size="lg" 
+                      onClick={startGame}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold"
+                    >
+                      <Icon name="Play" size={20} className="mr-2" />
+                      СТАРТ ИГРЫ
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="lg" 
+                      onClick={cashOut}
+                      className="bg-red-600 hover:bg-red-700 text-white font-bold animate-pulse"
+                    >
+                      <Icon name="DollarSign" size={20} className="mr-2" />
+                      ЗАБРАТЬ {(100 * coefficient).toFixed(0)}₽
+                    </Button>
+                  )}
+                </div>
+                
+                {/* Game Status */}
+                <div className="absolute top-4 right-4 z-10">
+                  <Badge className={`${
+                    gameActive ? 'bg-green-500 animate-pulse' : 'bg-gray-500'
+                  }`}>
+                    {gameActive ? '🟢 В ПОЛЕТЕ' : '⭕ ОЖИДАНИЕ'}
+                  </Badge>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-white font-bold mb-4">Ваша ставка</h3>
                   <div className="flex space-x-2">
-                    <Input placeholder="100" className="bg-white/10 border-white/20 text-white" />
-                    <Button className="bg-primary">Поставить</Button>
+                    <Input 
+                      placeholder="100" 
+                      disabled={gameActive}
+                      className="bg-white/10 border-white/20 text-white disabled:opacity-50" 
+                    />
+                    <Button 
+                      disabled={gameActive}
+                      className="bg-primary disabled:opacity-50"
+                    >
+                      Поставить
+                    </Button>
                   </div>
                 </div>
                 <div>
