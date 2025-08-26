@@ -46,9 +46,13 @@ export default function Index() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-white/20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Icon name="Plane" size={32} className="text-primary" />
-            <h1 className="text-2xl font-bold text-gray-900">AVIATOR</h1>
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/img/208774df-97fa-4a2c-90b3-1066380f7b31.jpg" 
+              alt="Aviator Logo" 
+              className="w-10 h-10 rounded-lg shadow-lg"
+            />
+            <h1 className="text-2xl font-bold text-gray-900 tracking-wide">AVIATOR</h1>
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <a href="#game" className="text-gray-700 hover:text-primary">Игра</a>
@@ -330,9 +334,13 @@ export default function Index() {
       {/* Footer */}
       <footer className="py-8 bg-black text-white">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Icon name="Plane" size={24} className="text-primary" />
-            <span className="text-xl font-bold">AVIATOR GAME</span>
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <img 
+              src="/img/208774df-97fa-4a2c-90b3-1066380f7b31.jpg" 
+              alt="Aviator Logo" 
+              className="w-8 h-8 rounded-lg"
+            />
+            <span className="text-xl font-bold tracking-wide">AVIATOR GAME</span>
           </div>
           <p className="text-gray-400 text-sm">
             © 2024 Aviator Game. Играйте ответственно. 18+
